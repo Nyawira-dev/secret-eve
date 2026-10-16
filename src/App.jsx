@@ -76,12 +76,11 @@ function App() {
 
     setCartOpen(true);
   };
-
-  const orderNow = (product) => {
+const orderNow = (product) => {
     const selection = getSelection(product);
     if (!selection) return;
 
-    const message = `Hello Secret Eve 
+    const message = `Hello Secret Eve
 
 I'd like to order:
 
@@ -99,42 +98,19 @@ Thank you!`;
     );
   };
 
-  const updateQuantity = (item, change) => {
-    setCart((currentCart) =>
-      currentCart
-        .map((cartItem) =>
-          cartItem.id === item.id &&
-          cartItem.selectedColor === item.selectedColor &&
-          cartItem.selectedSize === item.selectedSize
-            ? {
-                ...cartItem,
-                quantity: cartItem.quantity + change,
-              }
-            : cartItem
-        )
-        .filter((cartItem) => cartItem.quantity > 0)
-    );
-  };
-
-  const cartTotal = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-
   const checkoutCart = () => {
     if (cart.length === 0) return;
 
-    const message = `Hello Secret Eve 🌹
+    const message = `Hello Secret Eve
 
 I'd like to order:
 
 ${cart
   .map(
     (item) =>
-      `${item.name}
-${item.selectedColor ? `Color: ${item.selectedColor}\n` : ""}Size: ${item.selectedSize}
-Quantity: ${item.quantity}
-Subtotal: KSh ${(item.price * item.quantity).toLocaleString()}`
+      `${item.name}\n${
+        item.selectedColor ? `Color: ${item.selectedColor}\n` : ""
+      }Size: ${item.selectedSize}\nQuantity: ${ item.quantity }\n- Subtotal: KSh${(item.price * item.quantity).toLocaleString()}`
   )
   .join("\n\n")}
 
@@ -143,12 +119,11 @@ Total: KSh ${cartTotal.toLocaleString()}
 Thank you!`;
 
     window.open(
-      `https://wa.me/254798651199?text=${encodeURIComponent(message)}`,
+      `https://wa.me/254758522992?text=${encodeURIComponent(message)}`,
       "_blank",
       "noopener,noreferrer"
     );
   };
-
   return (
     <div className="secret-eve">
       {/* NAVIGATION */}
