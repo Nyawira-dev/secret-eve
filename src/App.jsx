@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import "./App.css";
 import products from "./data/products";
@@ -81,16 +80,16 @@ function App() {
     const selection = getSelection(product);
     if (!selection) return;
 
-    const message = `Hello Secret Eve 🌹
-
-I'd like to order:
-
-${product.name}
-${selection.selectedColor ? `Color: ${selection.selectedColor}\n` : ""}Size: ${selection.selectedSize}
-Quantity: 1
-Price: KSh ${product.price.toLocaleString()}
-
-Thank you!`;
+    // \uD83D\uDC4B = 👋 | \uD83D\uDC95 = 💕 | \u2764\uFE0F = ❤️
+    let message = "Hello Secret Eve \uD83D\uDC4B\uD83D\uDC95\n\nI'd like to order:\n\n";
+    message += product.name + "\n";
+    if (selection.selectedColor) {
+      message += "Color: " + selection.selectedColor + "\n";
+    }
+    message += "Size: " + selection.selectedSize + "\n";
+    message += "Quantity: 1\n";
+    message += "Price: KSh " + product.price.toLocaleString() + "\n\n";
+    message += "Thank you! \u2764\uFE0F";
 
     window.open(
       `https://wa.me/254758522992?text=${encodeURIComponent(message)}`,
@@ -124,26 +123,26 @@ Thank you!`;
   const checkoutCart = () => {
     if (cart.length === 0) return;
 
-    const message = `Hello Secret Eve 🌹
+    // \uD83D\uDC4B = 👋 | \uD83D\uDC95 = 💕 | \u2764\uFE0F = ❤️
+    let message = "Hello Secret Eve \uD83D\uDC4B\uD83D\uDC95\n\nI'd like to order:\n\n";
 
-I'd like to order:
+    const itemDetails = cart.map((item) => {
+      let details = item.name + "\n";
+      if (item.selectedColor) {
+        details += "Color: " + item.selectedColor + "\n";
+      }
+      details += "Size: " + item.selectedSize + "\n";
+      details += "Quantity: " + item.quantity + "\n";
+      details += "- Subtotal: KSh " + (item.price * item.quantity).toLocaleString();
+      return details;
+    });
 
-${cart
-  .map(
-    (item) =>
-      `${item.name}
-${item.selectedColor ? `Color: ${item.selectedColor}\n` : ""}Size: ${item.selectedSize}
-Quantity: ${item.quantity}
-Subtotal: KSh ${(item.price * item.quantity).toLocaleString()}`
-  )
-  .join("\n\n")}
-
-Total: KSh ${cartTotal.toLocaleString()}
-
-Thank you!`;
+    message += itemDetails.join("\n\n") + "\n\n";
+    message += "Total: KSh " + cartTotal.toLocaleString() + "\n\n";
+    message += "Thank you! \u2764\uFE0F";
 
     window.open(
-      `https://wa.me/254798651199?text=${encodeURIComponent(message)}`,
+      `https://wa.me/254758522992?text=${encodeURIComponent(message)}`,
       "_blank",
       "noopener,noreferrer"
     );
