@@ -93,7 +93,7 @@ Price: KSh ${product.price.toLocaleString()}
 Thank you!`;
 
     window.open(
-      `https://wa.me/254798651199?text=${encodeURIComponent(message)}`,
+      `https://wa.me/254758522992?text=${encodeURIComponent(message)}`,
       "_blank",
       "noopener,noreferrer"
     );
