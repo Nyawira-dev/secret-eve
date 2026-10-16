@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import "./App.css";
 import products from "./data/products";
@@ -9,6 +8,10 @@ function App() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedSizes, setSelectedSizes] = useState({});
   const [selectedColors, setSelectedColors] = useState({});
+
+  // PAGINATION STATE (5 products per page)
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 5;
 
   const getAvailableSizes = (product, color) => {
     if (product.id === 20 && color) {
@@ -76,7 +79,8 @@ function App() {
 
     setCartOpen(true);
   };
-const orderNow = (product) => {
+
+  const orderNow = (product) => {
     const selection = getSelection(product);
     if (!selection) return;
 
@@ -97,6 +101,28 @@ Thank you!`;
       "noopener,noreferrer"
     );
   };
+
+  const updateQuantity = (item, change) => {
+    setCart((currentCart) =>
+      currentCart
+        .map((cartItem) =>
+          cartItem.id === item.id &&
+          cartItem.selectedColor === item.selectedColor &&
+          cartItem.selectedSize === item.selectedSize
+            ? {
+                ...cartItem,
+                quantity: cartItem.quantity + change,
+              }
+            : cartItem
+        )
+        .filter((cartItem) => cartItem.quantity > 0)
+    );
+  };
+
+  const cartTotal = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   const checkoutCart = () => {
     if (cart.length === 0) return;
@@ -124,6 +150,16 @@ Thank you!`;
       "noopener,noreferrer"
     );
   };
+
+  // PAGINATION CALCULATIONS
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
   return (
     <div className="secret-eve">
       {/* NAVIGATION */}
@@ -205,7 +241,7 @@ Thank you!`;
         </div>
 
         <div className="product-grid">
-          {products.map((product) => {
+          {currentProducts.map((product) => {
             const colors = product.colors || [];
             const selectedColor = selectedColors[product.id] || "";
             const availableSizes = getAvailableSizes(
@@ -332,6 +368,37 @@ Thank you!`;
             );
           })}
         </div>
+
+        {/* PAGINATION CONTROLS */}
+        {totalPages > 1 && (
+          <div className="pagination">
+            <button
+              className="pagination-btn"
+              onClick={() => {
+                setCurrentPage((prev) => Math.max(prev - 1, 1));
+                document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              disabled={currentPage === 1}
+            >
+              ← Previous
+            </button>
+
+            <span className="page-info">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              className="pagination-btn"
+              onClick={() => {
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+                document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              disabled={currentPage === totalPages}
+            >
+              Next →
+            </button>
+          </div>
+        )}
       </section>
 
       {/* CART */}
